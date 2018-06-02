@@ -1,0 +1,16 @@
+title: Search Awasome
+email: awe at awesome.tf
+description: Search awesome-* Lists
+baseurl: "/"
+url: "http://awesome.tf"
+twitter_username: 
+github_username: sotiriosvrachas
+
+# Build settings
+#markdown: kramdown
+theme: minima
+
+algolia:
+  application_id: OCSEOFWPG9 
+  index_name: py-search-awesome
+  search_only_api_key: ad73bb48bdff3d3c2413b5bd3202d5e6

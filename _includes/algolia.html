@@ -1,0 +1,111 @@
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.6.0/dist/instantsearch.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.6.0/dist/instantsearch.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.6.0/dist/instantsearch-theme-algolia.min.css">
+<base href="{{ site.baseurl }}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js"></script>
+<script>
+showdown.extension('myExt', function() {
+    var matches = [];
+    return [
+        {
+            type: 'lang',
+            regex: /\(#([^]+?)\)/gi,
+            replace: function(s, match) {
+                matches.push(match);
+                var n = matches.length - 1;
+                return '(' + url + '#%PLACEHOLDER' + n + '%)';
+            }
+        },
+        {
+            type: 'output',
+            filter: function (text) {
+                for (var i=0; i< matches.length; ++i) {
+                    var pat = '%PLACEHOLDER' + i + '% *';
+                    text = text.replace(new RegExp(pat, 'gi'), matches[i]);
+                }
+                //reset array
+                matches = [];
+                return text;
+            }
+        }
+    ]
+});
+
+var converter = new showdown.Converter({extensions: ['myExt']});
+
+const search = instantsearch({
+  appId: '{{ site.algolia.application_id }}',
+  apiKey: '{{ site.algolia.search_only_api_key }}',
+  indexName: 'py-search-awesome'
+});
+ var url;
+const hitTemplate = function(hit) {
+  let link = `${hit.link}`;
+  let header = converter.makeHtml(`${hit.header}`);
+  let con = converter.makeHtml(`${hit.content}`);
+  url = link;
+  return `
+    <div class="post-item">
+      <a class="post-link" href="${link}">${header} ${link}</a>
+      <p>${con}</p>
+    </div>
+  `;
+}
+
+
+search.addWidget(
+  instantsearch.widgets.searchBox({
+    container: '#search-searchbar',
+    placeholder: 'Search into Awesome Lists...',
+    poweredBy: true
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.hits({
+    container: '#search-hits',
+    templates: {
+      item: hitTemplate
+    }
+  })
+);
+
+search.start();
+</script>
+
+<style>
+.ais-search-box {
+  max-width: 100%;
+  margin-bottom: 15px;
+}
+.post-item {
+  margin-bottom: 30px;
+}
+.post-link .ais-Highlight {
+  color: #111;
+  font-style: normal;
+  text-decoration: underline;
+}
+.post-breadcrumbs {
+  color: #424242;
+  display: block;
+}
+.post-breadcrumb {
+  font-size: 18px;
+  color: #424242;
+}
+.post-breadcrumb .ais-Highlight {
+  font-weight: bold;
+  font-style: normal;
+}
+.post-snippet .ais-Highlight {
+  color: #2a7ae2;
+  font-style: normal;
+  font-weight: bold;
+}
+.post-snippet img {
+  display: none;
+}
+</style>
+
