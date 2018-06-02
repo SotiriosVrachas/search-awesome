@@ -4,7 +4,7 @@ description: Search awesome-* Lists
 baseurl: ""
 url: "http://awesome.tf"
 twitter_username: 
-github_username: sotiriosvrachas
+github_username: SotiriosVrachas/search-awesome
 
 # Build settings
 #markdown: kramdown
