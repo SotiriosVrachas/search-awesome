@@ -1,7 +1,7 @@
 # search-awesome
 
 ```
-    <one line to give the program's name and a brief idea of what it does.>
+    Search Awesome - Search awesome-* Lists
     Copyright (C) 2018 Sotirios Vrachas <sotirios@vrachas.com> 
 
     This program is free software: you can redistribute it and/or modify
